@@ -1,6 +1,6 @@
 # MORITS
 
-This is the official repository for the MHC outstanding residue identifying tool for sequence alignment (MORITS)
+This is the official repository for the MHC outstanding residue identifying tool for sequence alignment (MORITS).
 
 MORITS is ready to be used under Microsoft Windows. You can use the two provided input files to run a peptide search between environmental allergens and SARS-CoV-2 by 
 1. loading them in the MORITS tool,
