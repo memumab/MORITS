@@ -6,7 +6,7 @@ MORITS is ready to be used under Microsoft Windows. You can use the two provided
 1. loading them in the MORITS tool,
 2. select the desired TCEM (or all three options)
 3. select the stringency of filtering (100% match = no mismatches allowed, 80% match = 1 mismatch along TCEM allowed)
-4. press "Find Matches"
+4. press "Find Matches". Depending on the size of your input files, the tool will take a while to perform the alignment and will be unresponsive until it is finished.
 5. save your result list in the end.
 
 The output list can be important in Microsoft Excel (or your preferred Software) to generate .fasta files to proceed with MHC binding prediction. The MHC binding prediction is not part of the MORITS tool.
