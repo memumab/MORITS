@@ -1,0 +1,601 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+
+namespace TwincoreProtSeq_App
+{
+
+    public partial class Form1 : Form
+    {
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        string[] fixid1 = new string[10000000];
+        string[] fixseq1 = new string[10000000];
+        string[] fixid2 = new string[10000000];
+        string[] fixseq2 = new string[10000000];
+        int col1 = 0;
+        int col2 = 0;
+        int score = 0;
+        int score1 = 0;
+        int score2 = 0;
+        char pos0 = ' ';
+        char pos1 = ' ';
+        char pos2 = ' ';
+        char pos3 = ' ';
+        char pos4 = ' ';
+        char pos5 = ' ';
+        char pos6 = ' ';
+        char pos7 = ' ';
+        char pos8 = ' ';
+        char pos9 = ' ';
+        char pos10 = ' ';
+        char pos11 = ' ';
+        char pos12 = ' ';
+        char pos13 = ' ';
+        char pos14 = ' ';
+        char pos0a = ' ';
+        char pos1a = ' ';
+        char pos2a = ' ';
+        char pos3a = ' ';
+        char pos4a = ' ';
+        char pos5a = ' ';
+        char pos6a = ' ';
+        char pos7a = ' ';
+        char pos8a = ' ';
+        char pos9a = ' ';
+        char pos10a = ' ';
+        char pos11a = ' ';
+        char pos12a = ' ';
+        char pos13a = ' ';
+        char pos14a = ' ';
+        int check1 = 0;
+        int check2 = 0;
+        int check3 = 0;
+
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonload_Click(object sender, EventArgs e)
+        {
+            StreamReader infile;
+            string filename;
+            string[] values = new string[10000000];
+            string[] ids = new string[10000000];
+            string[] seqs = new string[10000000];
+            string[] saver = new string[10000000];
+
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                listBox1.Items.Clear();
+                listBox1.HorizontalScrollbar = true;
+                filename = openFileDialog1.FileName;
+                string extension = Path.GetExtension(filename);
+
+
+                if (extension == ".tab")
+                {
+                    infile = File.OpenText(filename);
+                    var lines = File.ReadAllLines(filename);
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        string line = lines[i];
+                        values = line.Split('\t');
+                        string id = values[0];
+                        string seq = values[1];
+                        listBox1.Items.Add(id + "   " + seq);
+                        ids[i] = id;
+                        seqs[i] = seq;
+                        col1++;
+                        fixid1[i] = id;
+                        fixseq1[i] = seq;
+                    }
+                    infile.Close();
+                }
+                else { }
+
+
+                if (extension == ".csv")
+                {
+                    infile = File.OpenText(filename);
+                    var lines = File.ReadAllLines(filename);
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        string line = lines[i];
+                        values = line.Split(';');
+                        string id = values[0];
+                        string seq = values[1];
+                        listBox1.Items.Add(id + "   " + seq);
+                        ids[i] = id;
+                        seqs[i] = seq;
+                        col1++;
+                        fixid1[i] = id;
+                        fixseq1[i] = seq;
+                    }
+                    infile.Close();
+                }
+                else { }
+
+                if (extension == ".fasta")
+                {
+                    string content;
+                    using (StreamReader reader = new StreamReader(filename, Encoding.UTF8))
+                    {
+                        content = reader.ReadToEnd();
+                    }
+
+                    string[] lines = Regex.Split(content, @"\r?\n|\r");
+                    int S = 0;
+                    int idc = 0;
+                    lines[lines.Length - 1] = ">";
+
+                    StringBuilder[] saver1 = new StringBuilder[lines.Length];
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        saver1[i] = new StringBuilder();
+
+                        if (lines[i].StartsWith(">") && S >= 1)
+                        {
+                            fixseq1[idc] = saver1[idc].ToString();
+                            string id1 = fixid1[idc];
+                            string seq1 = fixseq1[idc];
+                            listBox1.Items.Add(id1 + "   " + seq1);
+                            col1++;
+                            idc++;
+                            i = i - 1;
+                            S = 0;
+                        }
+                        else if (lines[i].StartsWith(">"))
+                        {
+                            fixid1[idc] = lines[i];
+                        }
+                        else
+                        {
+                            saver1[idc].Append(lines[i]);
+                            S++;
+                        }
+                    }
+                }
+
+                else { }
+
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            StreamReader infile;
+            string filename;
+            string[] values = new string[10000000];
+            string[] ids2 = new string[10000000];
+            string[] seqs2 = new string[10000000];
+
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                listBox2.Items.Clear();
+                listBox2.HorizontalScrollbar = true;
+                filename = openFileDialog1.FileName;
+                string extension = Path.GetExtension(filename);
+
+
+                if (extension == ".tab")
+                {
+                    infile = File.OpenText(filename);
+                    var lines = File.ReadAllLines(filename);
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        string line = lines[i];
+                        values = line.Split('\t');
+                        string id = values[0];
+                        string seq = values[1];
+                        listBox2.Items.Add(id + "   " + seq);
+                        ids2[i] = id;
+                        seqs2[i] = seq;
+                        col2++;
+                        fixid2[i] = id;
+                        fixseq2[i] = seq;
+                    }
+                    infile.Close();
+                }
+                else { }
+
+
+                if (extension == ".csv")
+                {
+                    infile = File.OpenText(filename);
+                    var lines = File.ReadAllLines(filename);
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        string line = lines[i];
+                        values = line.Split(';');
+                        string id = values[0];
+                        string seq = values[1];
+                        listBox2.Items.Add(id + "   " + seq);
+                        ids2[i] = id;
+                        seqs2[i] = seq;
+                        col2++;
+                        fixid2[i] = id;
+                        fixseq2[i] = seq;
+                    }
+                    infile.Close();
+                }
+                else { }
+
+                if (extension == ".fasta")
+                {
+                    string content;
+                    using (StreamReader reader = new StreamReader(filename, Encoding.UTF8))
+                    {
+                        content = reader.ReadToEnd();
+                    }
+
+                    string[] lines = Regex.Split(content, @"\r?\n|\r");
+                    int S = 0;
+                    int idc = 0;
+                    lines[lines.Length - 1] = ">";
+
+
+                    StringBuilder[] saver2 = new StringBuilder[lines.Length];
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        saver2[i] = new StringBuilder();
+
+                        if (lines[i].StartsWith(">") && S >= 1)
+                        {
+                            fixseq2[idc] = saver2[idc].ToString();
+                            string id2 = fixid2[idc];
+                            string seq2 = fixseq2[idc];
+                            listBox2.Items.Add(id2 + "   " + seq2);
+                            col2++;
+                            idc++;
+                            i = i - 1;
+                            S = 0;
+                        }
+                        else if (lines[i].StartsWith(">"))
+                        {
+                            fixid2[idc] = lines[i];
+                        }
+                        else
+                        {
+                            saver2[idc].Append(lines[i]);
+                            S++;
+                        }
+                    }
+                }
+                else { }
+
+            }
+        }
+
+
+        private void AddItemToListBox3(string item)
+        {
+            if (listBox3.InvokeRequired)
+            {
+                listBox3.Invoke((MethodInvoker)delegate {
+                    listBox3.Items.Add(item);
+                });
+            }
+            else
+            {
+                listBox3.Items.Add(item);
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+
+            timer1.Enabled = false;
+
+            progressBar1.Maximum = col1;
+
+            listBox3.HorizontalScrollbar = true;
+
+            if (checkBox1.CheckState == CheckState.Checked)
+            {
+                check1 = 1;
+            }
+            if (checkBox2.CheckState == CheckState.Checked)
+            {
+                check2 = 1;
+            }
+            if (checkBox3.CheckState == CheckState.Checked)
+            {
+                check3 = 1;
+            }
+
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < col1; i++)
+                {
+                    string hold1 = fixseq1[i];
+                    char[] C = hold1.ToCharArray();
+
+                    progressBar1.Invoke((MethodInvoker)delegate 
+                    {
+                        progressBar1.Value++;
+                    });
+
+
+                    for (int a = 14; a < fixseq1[i].Length; a++)
+                    {
+
+                        pos0 = C[a - 14];
+                        pos1 = C[a - 13];
+                        pos2 = C[a - 12];
+                        pos3 = C[a - 11];
+                        pos4 = C[a - 10];
+                        pos5 = C[a - 9];
+                        pos6 = C[a - 8];
+                        pos7 = C[a - 7];
+                        pos8 = C[a - 6];
+                        pos9 = C[a - 5];
+                        pos10 = C[a - 4];
+                        pos11 = C[a - 3];
+                        pos12 = C[a - 2];
+                        pos13 = C[a - 1];
+                        pos14 = C[a];
+
+
+
+                        for (int b = 0; b < col2; b++)
+                        {
+                            string hold2 = fixseq2[b];
+                            char[] D = hold2.ToCharArray();
+                            timer1.Start();
+
+
+                            for (int x = 14; x < fixseq2[b].Length; x++)
+                            {
+                                pos0a = D[x - 14];
+                                pos1a = D[x - 13];
+                                pos2a = D[x - 12];
+                                pos3a = D[x - 11];
+                                pos4a = D[x - 10];
+                                pos5a = D[x - 9];
+                                pos6a = D[x - 8];
+                                pos7a = D[x - 7];
+                                pos8a = D[x - 6];
+                                pos9a = D[x - 5];
+                                pos10a = D[x - 4];
+                                pos11a = D[x - 3];
+                                pos12a = D[x - 2];
+                                pos13a = D[x - 1];
+                                pos14a = D[x];
+
+
+                                if (pos3 == pos3a)
+                                {
+                                    score++;
+                                }
+                                else
+                                {
+                                }
+                                if (pos4 == pos4a)
+                                {
+                                    score++;
+                                }
+                                else
+                                {
+                                }
+                                if (pos5 == pos5a)
+                                {
+                                    score++;
+                                }
+                                else
+                                {
+                                }
+                                if (pos6 == pos6a)
+                                {
+                                    score++;
+                                }
+                                else
+                                {
+                                }
+                                if (pos7 == pos7a)
+                                {
+                                    score++;
+                                }
+                                else
+                                {
+                                }
+
+                                if (score == 4 & checkBox1.CheckState == CheckState.Checked & checkBox4.CheckState == CheckState.Checked)
+                                {
+                                    AddItemToListBox3("ID: " + fixid1[i] + " Sequence: " + pos0 + pos1 + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + pos11 + pos12 + pos13 + pos14 + " ID: " + fixid2[b] + " Sequence: " + pos0a + pos1a + pos2a + pos3a + pos4a + pos5a + pos6a + pos7a + pos8a + pos9a + pos10a + pos11a + pos12a + pos13a + pos14a + " Coresequence: " + pos3 + pos4 + pos5 + pos6 + pos7 + " TCEM 1" + " Match: 80%");
+                                }
+                                else
+                                {
+                                }
+                                if (score == 5 & checkBox1.CheckState == CheckState.Checked & checkBox5.CheckState == CheckState.Checked)
+                                {
+                                    AddItemToListBox3("ID: " + fixid1[i] + " Sequence: " + pos0 + pos1 + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + pos11 + pos12 + pos13 + pos14 + " ID: " + fixid2[b] + " Sequence: " + pos0a + pos1a + pos2a + pos3a + pos4a + pos5a + pos6a + pos7a + pos8a + pos9a + pos10a + pos11a + pos12a + pos13a + pos14a + " Coresequence: " + pos3 + pos4 + pos5 + pos6 + pos7 + " TCEM 1" + " Match: 100%");
+                                }
+                                else
+                                {
+                                }
+
+
+                                if (pos4 == pos4a)
+                                {
+                                    score1++;
+                                }
+                                else
+                                { }
+                                if (pos5 == pos5a)
+                                {
+                                    score1++;
+                                }
+                                else
+                                { }
+                                if (pos7 == pos7a)
+                                {
+                                    score1++;
+                                }
+                                else
+                                { }
+                                if (pos9 == pos9a)
+                                {
+                                    score1++;
+                                }
+                                else
+                                { }
+                                if (pos10 == pos10a)
+                                {
+                                    score1++;
+                                }
+                                else
+                                { }
+
+                                if (score1 == 4 & checkBox2.CheckState == CheckState.Checked & checkBox4.CheckState == CheckState.Checked)
+                                {
+                                    AddItemToListBox3("ID: " + fixid1[i] + " Sequence: " + pos0 + pos1 + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + pos11 + pos12 + pos13 + pos14 + " ID: " + fixid2[b] + " Sequence: " + pos0a + pos1a + pos2a + pos3a + pos4a + pos5a + pos6a + pos7a + pos8a + pos9a + pos10a + pos11a + pos12a + pos13a + pos14a + " Coresequence: " + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + " TCEM 2a" + " Match: 80%");
+                                }
+                                else
+                                {
+                                }
+                                if (score1 == 5 & checkBox2.CheckState == CheckState.Checked & checkBox5.CheckState == CheckState.Checked)
+                                {
+                                    AddItemToListBox3("ID: " + fixid1[i] + " Sequence: " + pos0 + pos1 + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + pos11 + pos12 + pos13 + pos14 + " ID: " + fixid2[b] + " Sequence: " + pos0a + pos1a + pos2a + pos3a + pos4a + pos5a + pos6a + pos7a + pos8a + pos9a + pos10a + pos11a + pos12a + pos13a + pos14a + " Coresequence: " + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + " TCEM 2a" + " Match: 100%");
+                                }
+                                else
+                                {
+                                }
+
+                                if (pos2 == pos2a)
+                                {
+                                    score2++;
+                                }
+                                else { }
+                                if (pos5 == pos5a)
+                                {
+                                    score2++;
+                                }
+                                else { }
+                                if (pos7 == pos7a)
+                                {
+                                    score2++;
+                                }
+                                else { }
+                                if (pos9 == pos9a)
+                                {
+                                    score2++;
+                                }
+                                else { }
+                                if (pos10 == pos10a)
+                                {
+                                    score2++;
+                                }
+                                else { }
+
+                                if (score2 == 4 & checkBox3.CheckState == CheckState.Checked & checkBox4.CheckState == CheckState.Checked)
+                                {
+                                    AddItemToListBox3("ID: " + fixid1[i] + " Sequence: " + pos0 + pos1 + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + pos11 + pos12 + pos13 + pos14 + " ID: " + fixid2[b] + " Sequence: " + pos0a + pos1a + pos2a + pos3a + pos4a + pos5a + pos6a + pos7a + pos8a + pos9a + pos10a + pos11a + pos12a + pos13a + pos14a + " Coresequence: " + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + " TCEM 2b" + " Match: 80%");
+                                }
+                                else
+                                {
+                                }
+                                if (score2 == 5 & checkBox3.CheckState == CheckState.Checked & checkBox5.CheckState == CheckState.Checked)
+                                {
+                                    AddItemToListBox3("ID: " + fixid1[i] + " Sequence: " + pos0 + pos1 + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + pos11 + pos12 + pos13 + pos14 + " ID: " + fixid2[b] + " Sequence: " + pos0a + pos1a + pos2a + pos3a + pos4a + pos5a + pos6a + pos7a + pos8a + pos9a + pos10a + pos11a + pos12a + pos13a + pos14a + " Coresequence: " + pos2 + pos3 + pos4 + pos5 + pos6 + pos7 + pos8 + pos9 + pos10 + " TCEM 2b" + " Match: 100%");
+                                }
+                                else
+                                {
+                                }
+
+                                score = 0;
+                                score1 = 0;
+                                score2 = 0;
+                            }
+                        }
+                    }
+
+
+
+                }
+            });
+
+            timer1.Enabled = true;
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+
+                List<string> Output = new List<string>();
+
+                for (int t = 0; t < listBox3.Items.Count; t++)
+                {
+                    Output.Add((string)listBox3.Items[t]);
+                }
+
+
+                System.IO.File.WriteAllLines(dlg.FileName, Output);
+
+
+            }
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void label7_Click_1(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
